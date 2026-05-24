@@ -27,8 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: npm
+          node-version: 24
 
       - name: Install dependencies
         run: npm install
@@ -36,8 +35,6 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Optional: add VITE_ANTHROPIC_API_KEY in your repo's Settings > Secrets
-          # If not set, users will enter their own key at runtime.
           VITE_ANTHROPIC_API_KEY: ${{ secrets.VITE_ANTHROPIC_API_KEY }}
 
       - name: Setup Pages
