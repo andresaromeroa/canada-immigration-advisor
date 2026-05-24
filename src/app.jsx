@@ -536,60 +536,14 @@ function Results({lang,tr,answers,onReset,apiKey}){
   );
 }
 
-// ── API KEY SETUP SCREEN ──────────────────────────────────────────────────────
-function ApiKeySetup({onDone}){
-  const [key,setKey]=useState('');
-  const [err,setErr]=useState('');
-  const check=()=>{
-    if(!key.startsWith('sk-ant-')){setErr('The key should start with sk-ant-... Get yours at console.anthropic.com');return;}
-    onDone(key.trim());
-  };
-  return(
-    <div style={{minHeight:'100vh',background:'linear-gradient(150deg,#082016 0%,#0f3d24 55%,#1a6b3e 100%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'32px 20px'}}>
-      <style>{STYLE}</style>
-      <div style={{fontSize:52,marginBottom:16}}>🍁</div>
-      <h1 style={{fontFamily:'Lora,serif',color:'#fff',fontSize:'clamp(20px,4vw,32px)',textAlign:'center',marginBottom:12}}>Canada Immigration Advisor</h1>
-      <p style={{color:'rgba(255,255,255,0.7)',textAlign:'center',fontSize:15,maxWidth:460,lineHeight:1.6,marginBottom:36}}>
-        To enable the AI chat assistant, enter your Anthropic API key.<br/>
-        <span style={{fontSize:13,opacity:0.6}}>The key stays in your browser session only — it's never stored or sent anywhere else.</span>
-      </p>
-      <div style={{background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:14,padding:'28px 28px',maxWidth:460,width:'100%'}}>
-        <label style={{color:'rgba(255,255,255,0.8)',fontSize:13,fontWeight:700,display:'block',marginBottom:8}}>ANTHROPIC API KEY</label>
-        <input value={key} onChange={e=>{setKey(e.target.value);setErr('');}} placeholder="sk-ant-api03-..."
-          style={{width:'100%',background:'rgba(255,255,255,0.08)',border:'1.5px solid rgba(255,255,255,0.2)',borderRadius:9,padding:'12px 14px',color:'#fff',fontFamily:'monospace',fontSize:14,marginBottom:err?8:16,outline:'none'}}
-          onFocus={e=>e.target.style.borderColor='rgba(255,255,255,0.5)'}
-          onBlur={e=>e.target.style.borderColor='rgba(255,255,255,0.2)'}
-          onKeyDown={e=>e.key==='Enter'&&check()}/>
-        {err&&<div style={{color:'#fca5a5',fontSize:12,marginBottom:12}}>{err}</div>}
-        <button onClick={check} style={{width:'100%',background:'#fff',color:'#0f3d24',fontFamily:'Plus Jakarta Sans,sans-serif',fontWeight:800,fontSize:15,padding:'13px',borderRadius:9,border:'none',cursor:'pointer'}}>
-          Continue →
-        </button>
-        <div style={{marginTop:16,textAlign:'center'}}>
-          <a href="https://console.anthropic.com/keys" target="_blank" rel="noreferrer"
-            style={{color:'rgba(255,255,255,0.5)',fontSize:12,textDecoration:'none'}}>
-            Get a free API key at console.anthropic.com →
-          </a>
-        </div>
-      </div>
-      <div style={{marginTop:24,textAlign:'center'}}>
-        <button onClick={()=>onDone('')} style={{background:'none',border:'none',color:'rgba(255,255,255,0.4)',fontFamily:'Plus Jakarta Sans,sans-serif',fontSize:13,cursor:'pointer',textDecoration:'underline'}}>
-          Continue without AI chat (calculator only)
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // ── APP ───────────────────────────────────────────────────────────────────────
 export default function App(){
-  const [apiKey,setApiKey]=useState(import.meta.env.VITE_ANTHROPIC_API_KEY||'');
-  const [keySet,setKeySet]=useState(!!(import.meta.env.VITE_ANTHROPIC_API_KEY));
+  const apiKey=import.meta.env.VITE_ANTHROPIC_API_KEY||'';
   const [lang,setLang]=useState(null);
   const [screen,setScreen]=useState('lang');
   const [answers,setAnswers]=useState({});
   const tr=TR[lang]||TR.es;
   const reset=()=>{setScreen('lang');setLang(null);setAnswers({});};
-  if(!keySet)return<ApiKeySetup onDone={k=>{setApiKey(k);setKeySet(true);}}/>;
   if(screen==='lang')return<LangSelect onSelect={l=>{setLang(l);setScreen('welcome');}}/>;
   return(
     <>
